@@ -21,7 +21,7 @@ document.body.appendChild(renderer.domElement);
 setupLights(scene);
 
 // Load glTF arena
-const loader = new THREE.GLTFLoader();
+const loader = new THREE.GLTFLoader();  // ✅ THIS WORKS now
 loader.load(
   'assets/arena/mountain.gltf',
   function(gltf) {
