@@ -4,7 +4,7 @@ import { setupLights } from './light.js';
 
 // Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x87ceeb); // sky blue
+scene.background = new THREE.Color(0x87ceeb);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(
@@ -13,7 +13,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   5000
 );
-camera.position.set(0, 50, 150);
+camera.position.set(0, 80, 160);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -24,12 +24,12 @@ document.body.appendChild(renderer.domElement);
 // Lights
 setupLights(scene);
 
-// Load arena (glTF)
+// Load arena from your path
 const loader = new GLTFLoader();
-loader.load('./models/mountain.glb', (gltf) => {
+loader.load('assets/arena/mountain.gltf', (gltf) => {
   const arena = gltf.scene;
 
-  arena.scale.set(1, 1, 1); // adjust if needed
+  arena.scale.set(1, 1, 1); // adjust if too big/small
   arena.position.set(0, 0, 0);
 
   arena.traverse((obj) => {
@@ -40,6 +40,8 @@ loader.load('./models/mountain.glb', (gltf) => {
   });
 
   scene.add(arena);
+}, undefined, (error) => {
+  console.error('Error loading GLTF:', error);
 });
 
 // Resize handler
@@ -49,10 +51,9 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Game loop
+// Animation loop
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
-
 animate();
