@@ -2,7 +2,7 @@ import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
 
 export function setupLights(scene) {
   // Soft global light
-  const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambient = new THREE.AmbientLight(0xffffff, 1.0);
   scene.add(ambient);
 
   // Sun light
