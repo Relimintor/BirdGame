@@ -1,7 +1,3 @@
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-import { setupLights } from './light.js';
-
 // Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
@@ -14,44 +10,49 @@ const camera = new THREE.PerspectiveCamera(
   5000
 );
 camera.position.set(0, 80, 160);
+camera.lookAt(0, 0, 0);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
 // Lights
 setupLights(scene);
 
-// Load arena from your path
-const loader = new GLTFLoader();
-loader.load('assets/arena/mountain.gltf', (gltf) => {
-  const arena = gltf.scene;
+// Load glTF arena
+const loader = new THREE.GLTFLoader();
+loader.load(
+  'assets/arena/mountain.gltf',
+  function(gltf) {
+    const arena = gltf.scene;
 
-  arena.scale.set(1, 1, 1); // adjust if too big/small
-  arena.position.set(0, 0, 0);
+    arena.scale.set(1, 1, 1);
+    arena.position.set(0, 0, 0);
 
-  arena.traverse((obj) => {
-    if (obj.isMesh) {
-      obj.castShadow = true;
-      obj.receiveShadow = true;
-    }
-  });
+    arena.traverse(function(obj) {
+      if (obj.isMesh) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
 
-  scene.add(arena);
-}, undefined, (error) => {
-  console.error('Error loading GLTF:', error);
-});
+    scene.add(arena);
+  },
+  undefined,
+  function(error) {
+    console.error('GLTF Load Error:', error);
+  }
+);
 
-// Resize handler
-window.addEventListener('resize', () => {
+// Resize
+window.addEventListener('resize', function() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Animation loop
+// Animate
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
